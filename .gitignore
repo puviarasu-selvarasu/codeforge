@@ -1,0 +1,34 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+venv/
+env/
+.venv/
+
+# Django
+db.sqlite3
+*.log
+*.pot
+*.mo
+/media/
+/staticfiles/
+
+# CodeForge specific - user data and generated projects
+/knowledge/
+/generated_projects/
+/lancedb/
+/models/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo

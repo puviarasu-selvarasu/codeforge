@@ -1,0 +1,70 @@
+/* Variables and reset */
+:root {
+    --bg-primary: #0b0e14;
+    --bg-secondary: #161b24;
+    --text-primary: #e8edf5;
+    --text-secondary: #8892a8;
+    --accent: #5b8def;
+    --accent-hover: #4a7adf;
+    --border-color: #2a3340;
+    --font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    font-family: var(--font-family);
+    line-height: 1.6;
+    min-height: 100vh;
+}
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 1.5rem;
+}
+
+a {
+    color: var(--accent);
+    text-decoration: none;
+}
+
+a:hover {
+    color: var(--accent-hover);
+}
+
+.navbar {
+    background: var(--bg-secondary);
+    padding: 0.75rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.navbar-brand a {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--text-primary);
+}
+
+.navbar-links a {
+    margin-left: 1.5rem;
+    color: var(--text-secondary);
+    font-size: 1rem;
+}
+
+.navbar-links a:hover {
+    color: var(--text-primary);
+}
+
+/* Utility */
+.text-muted {
+    color: var(--text-secondary);
+}

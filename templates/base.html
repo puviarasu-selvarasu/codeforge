@@ -1,0 +1,42 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}CodeForge{% endblock %}</title>
+    <!-- Alpine.js (lightweight) -->
+    <script defer src="{% static 'js/alpine.min.js' %}"></script>    <!-- External CSS -->
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'css/components.css' %}">
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+    <div x-data="AppStore()" x-init="init()">
+        <!-- Navbar -->
+        {% include 'includes/navbar.html' %}
+        
+        <!-- Main content -->
+        <main class="container">
+            {% block content %}
+            {% endblock %}
+        </main>
+    </div>
+
+    <!-- JavaScript globals -->
+    <script>
+        // Global store for Alpine (we'll load components later)
+        function AppStore() {
+            return {
+                init() {
+                    // future init
+                }
+            }
+        }
+    </script>
+    <!-- Core JS -->
+    <script src="{% static 'js/core/store.js' %}"></script>
+    <script src="{% static 'js/core/api.js' %}"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

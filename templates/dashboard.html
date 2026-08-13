@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Dashboard - CodeForge{% endblock %}
+
+{% block content %}
+<div class="dashboard">
+    <div class="card">
+        <h1 class="card-title">Welcome to CodeForge</h1>
+        <p class="text-muted">Your sovereign AI developer studio.</p>
+        <div class="ram-status">
+            <span>Free RAM: {{ ram_status.free_gb|floatformat:2 }} GB</span>
+            {% if ram_status.is_safe %}
+                <span class="badge badge-success">✅ Safe</span>
+            {% else %}
+                <span class="badge badge-danger">⚠️ Low RAM</span>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Chat area placeholder -->
+    <div class="card">
+        <h2 class="card-title">Chat</h2>
+        <div id="chat-widget">
+            <!-- We'll integrate chat in Sprint 1 -->
+            <p class="text-muted">Chat will be available in Sprint 1.</p>
+        </div>
+    </div>
+
+    <!-- Projects list placeholder -->
+    <div class="card">
+        <h2 class="card-title">Projects</h2>
+        <p class="text-muted">No projects yet. Use the chat to generate one.</p>
+    </div>
+</div>
+{% endblock %}
