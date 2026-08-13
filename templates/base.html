@@ -5,10 +5,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}CodeForge{% endblock %}</title>
-    <!-- Alpine.js (lightweight) -->
-    <script defer src="{% static 'js/alpine.min.js' %}"></script>    <!-- External CSS -->
+    <!-- Local CSS -->
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
     <link rel="stylesheet" href="{% static 'css/components.css' %}">
+    <link rel="stylesheet" href="{% static 'css/highlight.css' %}">
+    <!-- Alpine.js (local) -->
+    <script defer src="{% static 'js/alpine.min.js' %}"></script>
     {% block extra_head %}{% endblock %}
 </head>
 <body>
@@ -37,6 +39,9 @@
     <!-- Core JS -->
     <script src="{% static 'js/core/store.js' %}"></script>
     <script src="{% static 'js/core/api.js' %}"></script>
+    <!-- Libraries -->
+    <script src="{% static 'js/libs/marked.min.js' %}"></script>
+    <script src="{% static 'js/libs/highlight.min.js' %}"></script>
     {% block extra_js %}{% endblock %}
 </body>
 </html>

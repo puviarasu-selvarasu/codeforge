@@ -1,0 +1,6 @@
+<div class="chat-input-container">
+    <form @submit.prevent="sendMessage()">
+        <input type="text" x-model="currentMessage" placeholder="Ask me anything..." class="chat-input">
+        <button type="submit" class="btn btn-primary" :disabled="isLoading">Send</button>
+    </form>
+</div>
