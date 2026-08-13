@@ -7,6 +7,7 @@ from .router import SmartRouter
 from .intent import detect_build_intent
 # We'll use the singleton instance
 llm = LLMWrapper()
+from apps.knowledge.query import query_knowledge
 
 @csrf_exempt  # for simplicity; if you have CSRF, add token
 def chat_stream(request):
@@ -29,11 +30,11 @@ def chat_stream(request):
     # 2. For complex queries, use LLM with optional RAG (we'll add RAG later)
     # For now, no RAG context
     def stream_generator():
-        # We can also detect intent and store for later
         is_build = detect_build_intent(message)
-        # If build intent, we might store a flag; later we'll trigger project generation.
-        # For now, just reply with the LLM.
-        for chunk in llm.generate_stream(message):
+        # Retrieve relevant context from the knowledge base
+        context_chunks = query_knowledge(message, top_k=5)
+        # Pass the context to the LLM
+        for chunk in llm.generate_stream(message, context_chunks=context_chunks):
             yield chunk
     
     return StreamingHttpResponse(stream_generator(), content_type='text/plain')

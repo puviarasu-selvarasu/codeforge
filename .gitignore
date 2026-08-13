@@ -26,6 +26,7 @@ db.sqlite3
 /generated_projects/
 /lancedb/
 /models/
+/tfidf_index.json
 
 # IDE
 .vscode/
