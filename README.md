@@ -95,7 +95,7 @@ You                                     Say	CodeForge Does
 "Switch to Smart (7B)"	(In Studio) Reloads the 7B model (if RAM allows).
 
 📜 License
-MIT – feel free to use, modify, and distribute.
+MIT – feel free to use, and distribute.
 
 🙏 Acknowledgments
 Qwen for the Qwen-Coder models
