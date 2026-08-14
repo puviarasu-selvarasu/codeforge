@@ -164,9 +164,6 @@ document.addEventListener('alpine:init', () => {
                 'Delete Conversation',
                 'Delete this conversation permanently?',
                 () => {
-                    if (!confirm(`Delete conversation "${this.conversations.find(c => c.id === convId)?.name || 'Untitled'}"?`)) {
-                        return;
-                    }
                     // 1. Remove from the conversations array
                     const index = this.conversations.findIndex(c => c.id === convId);
                     if (index === -1) return;

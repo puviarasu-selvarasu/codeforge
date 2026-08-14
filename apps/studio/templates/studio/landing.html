@@ -1,9 +1,8 @@
-
 {% extends 'studio/base_studio.html' %}
 {% load static %}
 
 {% block studio_content %}
-<div class="studio-landing">
+<div class="studio-landing" x-data="projectList()" x-init="init()">
     <div class="header-row">
         <h1>Your Projects</h1>
         <a href="{% url 'studio:project_create' %}" class="btn btn-primary">+ New Project</a>
@@ -62,7 +61,7 @@
 </div>
 {% endblock %}
 
-{% block extra_scripts %}
+{% block extra_js %}
 <script>
     document.addEventListener('alpine:init', () => {
         Alpine.data('projectList', () => ({
@@ -70,29 +69,15 @@
             deleting: false,
 
             async init() {
-                await this.loadProjects();
-            },
-
-            async loadProjects() {
-                try {
-                    const response = await fetch('/api/projects/');
-                    if (response.ok) {
-                        this.projects = await response.json();
-                    } else {
-                        this.projects = [];
-                    }
-                } catch (e) {
-                    console.error('Failed to load projects:', e);
-                    this.projects = [];
-                }
+                // Projects are already rendered server-side, but we keep this for dynamic updates
+                // We'll just handle deletion
             },
 
             async deleteProject(id) {
                 window.modal.openConfirm(
                     'Delete Project',
                     'Delete this project and all its files?',
-                    async () => {                        
-                        if (!confirm('Delete this project permanently?')) return;
+                    async () => {
                         this.deleting = true;
                         try {
                             const response = await fetch(`/studio/${id}/delete/`, {
@@ -102,13 +87,12 @@
                                 }
                             });
                             if (response.ok) {
-                                // Remove project from list
-                                this.projects = this.projects.filter(p => p.id !== id);
+                                window.location.reload(); // Reload to update the paginated list
                             } else {
-                                alert('Failed to delete project.');
+                                window.toast.show('Failed to delete project.', 'error');
                             }
                         } catch (e) {
-                            alert('Error deleting project.');
+                            window.toast.show('Error deleting project.', 'error');
                         } finally {
                             this.deleting = false;
                         }
@@ -118,5 +102,4 @@
         }));
     });
 </script>
-
 {% endblock %}

@@ -12,6 +12,7 @@ class LLMWrapper:
     _instance = None
     _model = None
     _current_model_type = None
+    _max_tokens = None
 
     def __new__(cls):
         if cls._instance is None:
@@ -19,10 +20,6 @@ class LLMWrapper:
         return cls._instance
 
     def load_model(self, model_type=None):
-        """
-        Load the specified model (1.5B or 7B).
-        If model_type is None, use DEFAULT_LLM_MODEL from settings.
-        """
         if model_type is None:
             model_type = getattr(settings, 'DEFAULT_LLM_MODEL', '1.5B')
 
@@ -44,16 +41,19 @@ class LLMWrapper:
             gc.collect()
             logger.info("Unloaded previous model.")
 
-        # Determine model path
+        # Determine model path and max_tokens
         if model_type == '7B':
             model_path = getattr(settings, 'LLM_7B_MODEL_PATH', None)
+            self._max_tokens = getattr(settings, 'LLM_7B_MAX_TOKENS', 2048)
         else:
             model_path = getattr(settings, 'LLM_15B_MODEL_PATH', None)
+            self._max_tokens = getattr(settings, 'LLM_15B_MAX_TOKENS', 1024)
 
         if not model_path or not Path(model_path).exists():
             logger.error(f"Model file not found: {model_path}")
             self._model = None
             self._current_model_type = None
+            self._max_tokens = None
             return
 
         # Load new model
@@ -67,14 +67,14 @@ class LLMWrapper:
                 use_mlock=False,
             )
             self._current_model_type = model_type
-            logger.info(f"Loaded model: {model_type} from {model_path}")
+            logger.info(f"Loaded model: {model_type} from {model_path} (max_tokens: {self._max_tokens})")
         except Exception as e:
             logger.error(f"Failed to load model {model_type}: {e}")
             self._model = None
             self._current_model_type = None
+            self._max_tokens = None
 
     def generate_stream(self, user_message, context_chunks=None, system_override=None):
-        """Stream tokens using the currently loaded model."""
         if self._model is None:
             self.load_model(getattr(settings, 'DEFAULT_LLM_MODEL', '1.5B'))
             if self._model is None:
@@ -93,9 +93,12 @@ class LLMWrapper:
             prompt += f"<|im_start|>{msg['role']}\n{msg['content']}<|im_end|>\n"
         prompt += "<|im_start|>assistant\n"
 
+        # Use the dynamic max_tokens
+        max_tokens = self._max_tokens or 1024  # fallback
+
         stream = self._model.create_completion(
             prompt,
-            max_tokens=512,
+            max_tokens=max_tokens,
             temperature=0.7,
             top_p=0.9,
             echo=False,
@@ -107,11 +110,13 @@ class LLMWrapper:
                 if delta:
                     yield delta
 
-    # Set the system prompt (can be overridden)
+    # System prompt remains the same
     system_prompt = (
         "You are CodeForge, a senior software engineer, architect, and technical lead. "
         "Your expertise spans full‑stack web development, system design, and best practices. "
         "You provide clear, concise, and professional guidance, always aiming for production‑ready code. "
-        "When asked to create or modify files, respond with a JSON block containing the action, file path, and content. "
-        "For general questions, give thoughtful, structured answers that reflect your senior role."
+        "For general questions (like 'what is X', 'explain Y'), provide thoughtful, structured textual explanations. "
+        "Only output JSON when the user explicitly asks to create, modify, or delete a file. "
+        "When you do output JSON, use this format: "
+        "{ \"action\": \"create\" or \"modify\" or \"delete\", \"file_path\": \"path/relative/to/project\", \"content\": \"file content\" }."
     )

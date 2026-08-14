@@ -108,6 +108,9 @@ LLM_7B_MODEL_PATH = BASE_DIR / 'models' / 'qwen2.5-coder-7b-instruct-q5_k_m.gguf
 # Default model (used in Dashboard and initial Studio load)
 DEFAULT_LLM_MODEL = '1.5B'   # options: '1.5B' or '7B'
 
+LLM_7B_MAX_TOKENS = 3072
+LLM_15B_MAX_TOKENS = 1024
+
 # Inference settings (shared by both models)
 LLM_N_CTX = 4096
 LLM_N_BATCH = 256
