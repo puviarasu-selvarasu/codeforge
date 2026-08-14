@@ -224,13 +224,15 @@
 
 .message-bubble {
     max-width: 80%;
-    padding: 0.8rem 1.2rem;
+    padding: 0.6rem 1.2rem;
     border-radius: var(--radius);
     background: rgba(0, 0, 0, 0.3);
     border: 1px solid var(--border-color);
     word-wrap: break-word;
-    display: inline-block;          /* <-- shrink to content */
-    text-align: left;               /* ensure left alignment */
+    display: inline-block;
+    width: auto;           /* Shrink to content */
+    min-width: 0;          /* Prevent overflow */
+    text-align: left;
 }
 
 /* User messages - gradient background */

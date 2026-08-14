@@ -1,0 +1,122 @@
+
+{% extends 'studio/base_studio.html' %}
+{% load static %}
+
+{% block studio_content %}
+<div class="studio-landing">
+    <div class="header-row">
+        <h1>Your Projects</h1>
+        <a href="{% url 'studio:project_create' %}" class="btn btn-primary">+ New Project</a>
+    </div>
+
+    {% if projects %}
+    <div class="table-wrapper">
+        <table class="project-table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Framework</th>
+                    <th>Status</th>
+                    <th>Created</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for project in projects %}
+                <tr>
+                    <td><a href="{% url 'studio:project_detail' project.id %}" class="project-link">{{ project.name }}</a></td>
+                    <td>{{ project.framework|default:"-" }}</td>
+                    <td><span class="badge badge-{{ project.status }}">{{ project.status }}</span></td>
+                    <td>{{ project.created_at|date:"Y-m-d H:i" }}</td>
+                    <td>
+                        <a href="{% url 'studio:project_detail' project.id %}" class="btn btn-sm btn-primary">Open</a>
+                        <button class="btn btn-sm btn-danger" @click="deleteProject({{ project.id }})">×</button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Pagination -->
+    <div class="pagination">
+        <span class="step-links">
+            {% if projects.has_previous %}
+                <a href="?page=1" class="btn btn-sm">« first</a>
+                <a href="?page={{ projects.previous_page_number }}" class="btn btn-sm">‹ prev</a>
+            {% endif %}
+
+            <span class="current">
+                Page {{ projects.number }} of {{ projects.paginator.num_pages }}
+            </span>
+
+            {% if projects.has_next %}
+                <a href="?page={{ projects.next_page_number }}" class="btn btn-sm">next ›</a>
+                <a href="?page={{ projects.paginator.num_pages }}" class="btn btn-sm">last »</a>
+            {% endif %}
+        </span>
+    </div>
+    {% else %}
+        <p class="text-muted">No projects yet. Create one!</p>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    document.addEventListener('alpine:init', () => {
+        Alpine.data('projectList', () => ({
+            projects: [],
+            deleting: false,
+
+            async init() {
+                await this.loadProjects();
+            },
+
+            async loadProjects() {
+                try {
+                    const response = await fetch('/api/projects/');
+                    if (response.ok) {
+                        this.projects = await response.json();
+                    } else {
+                        this.projects = [];
+                    }
+                } catch (e) {
+                    console.error('Failed to load projects:', e);
+                    this.projects = [];
+                }
+            },
+
+            async deleteProject(id) {
+                window.modal.openConfirm(
+                    'Delete Project',
+                    'Delete this project and all its files?',
+                    async () => {                        
+                        if (!confirm('Delete this project permanently?')) return;
+                        this.deleting = true;
+                        try {
+                            const response = await fetch(`/studio/${id}/delete/`, {
+                                method: 'DELETE',
+                                headers: {
+                                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]')?.value || '',
+                                }
+                            });
+                            if (response.ok) {
+                                // Remove project from list
+                                this.projects = this.projects.filter(p => p.id !== id);
+                            } else {
+                                alert('Failed to delete project.');
+                            }
+                        } catch (e) {
+                            alert('Error deleting project.');
+                        } finally {
+                            this.deleting = false;
+                        }
+                    }
+                );
+            }
+        }));
+    });
+</script>
+
+{% endblock %}

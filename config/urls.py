@@ -25,4 +25,5 @@ urlpatterns = [
     path('', include('apps.core.urls')),  # we'll rename core's urls to dashboard
     path('chat/', include('apps.chat.urls')),
     path('api/projects/', include('apps.projects.urls')),
+    path('studio/', include('apps.studio.urls')),
 ]

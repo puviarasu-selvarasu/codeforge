@@ -1,0 +1,313 @@
+/* apps/studio/static/studio/studio.css */
+
+.studio-create-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh;
+    padding: 2rem;
+}
+
+.studio-create-card {
+    background: var(--bg-card);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius);
+    padding: 2.5rem;
+    max-width: 600px;
+    width: 100%;
+    box-shadow: var(--shadow-glow);
+}
+
+.studio-create-card h1 {
+    font-size: 2rem;
+    margin-bottom: 0.25rem;
+    color: var(--text-primary);
+}
+
+.studio-create-card .subtitle {
+    color: var(--text-secondary);
+    margin-bottom: 2rem;
+    font-size: 0.95rem;
+}
+
+/* Form styling */
+.studio-form .form-group {
+    margin-bottom: 1.5rem;
+}
+
+.studio-form label {
+    display: block;
+    font-weight: 600;
+    font-size: 0.9rem;
+    margin-bottom: 0.3rem;
+    color: var(--text-primary);
+}
+
+.studio-form input,
+.studio-form select,
+.studio-form textarea {
+    width: 100%;
+    padding: 0.7rem 1rem;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius);
+    color: var(--text-primary);
+    font-size: 1rem;
+    transition: border-color 0.2s;
+}
+
+.studio-form input:focus,
+.studio-form select:focus,
+.studio-form textarea:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 20px rgba(0, 212, 255, 0.05);
+}
+
+.studio-form .form-hint {
+    display: block;
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    margin-top: 0.25rem;
+}
+
+.btn-create {
+    width: 100%;
+    padding: 0.8rem;
+    font-size: 1rem;
+    margin-top: 0.5rem;
+}
+
+.studio-detail {
+    height: calc(100vh - 80px);
+    display: flex;
+    flex-direction: column;
+}
+
+.studio-layout {
+    display: grid;
+    grid-template-columns: 240px 1fr 300px;
+    gap: 0;
+    flex: 1;
+    overflow: hidden;
+    border-top: 1px solid var(--border-color);
+}
+
+.studio-tree, .studio-preview {
+    background: var(--bg-card);
+    padding: 1rem;
+    overflow-y: auto;
+    border-right: 1px solid var(--border-color);
+}
+
+.studio-preview {
+    border-right: none;
+    border-left: 1px solid var(--border-color);
+}
+
+.studio-chat {
+    display: flex;
+    flex-direction: column;
+    background: var(--bg-card);
+    overflow: hidden;
+}
+
+.studio-chat .chat-messages-container {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1rem;
+}
+
+.studio-chat .chat-input-container {
+    padding: 0.8rem 1rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.tree-item {
+    cursor: pointer;
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+    transition: background 0.15s;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+.tree-item:hover {
+    background: rgba(0, 212, 255, 0.05);
+}
+.tree-item.folder {
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+.tree-item.file {
+    color: var(--text-primary);
+    padding-left: 1.2rem;
+}
+.tree-item.file:hover {
+    color: var(--accent);
+}
+
+.senior-badge {
+    background: rgba(0, 212, 255, 0.15);
+    color: var(--accent);
+    padding: 0.15rem 0.6rem;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    font-weight: 500;
+    border: 1px solid rgba(0, 212, 255, 0.2);
+    margin-left: 0.8rem;
+}
+
+.senior-badge {
+    background: rgba(0, 212, 255, 0.15);
+    color: var(--accent);
+    padding: 0.15rem 0.6rem;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    font-weight: 500;
+    border: 1px solid rgba(0, 212, 255, 0.2);
+    margin-left: 0.8rem;
+}
+
+.studio-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: nowrap;
+    padding: 0.8rem 2rem;
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border-color);
+    gap: 1rem;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+}
+
+.header-left h1 {
+    font-size: 1.3rem;
+    font-weight: 600;
+    white-space: nowrap;
+    margin: 0;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    margin-left: auto;
+}
+
+/* ---- Datatable ---- */
+.table-wrapper {
+    overflow-x: auto;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius);
+    background: var(--bg-card);
+}
+
+.project-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+}
+
+.project-table thead {
+    background: var(--bg-secondary);
+    border-bottom: 2px solid var(--border-color);
+}
+
+.project-table th {
+    text-align: left;
+    padding: 0.8rem 1rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.5px;
+}
+
+.project-table td {
+    padding: 0.7rem 1rem;
+    border-bottom: 1px solid var(--border-color);
+    vertical-align: middle;
+}
+
+.project-table tbody tr:hover {
+    background: rgba(0, 212, 255, 0.03);
+}
+
+.project-table tbody tr:nth-child(even) {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.project-table .project-link {
+    color: var(--text-primary);
+    font-weight: 500;
+    text-decoration: none;
+}
+.project-table .project-link:hover {
+    color: var(--accent);
+}
+
+/* Badge sizes */
+.project-table .badge {
+    font-size: 0.7rem;
+    padding: 0.15rem 0.6rem;
+}
+
+/* Action buttons */
+.btn-sm {
+    padding: 0.2rem 0.6rem;
+    font-size: 0.75rem;
+    border-radius: 4px;
+    margin: 0 0.1rem;
+}
+
+.btn-danger {
+    background: rgba(255, 82, 82, 0.15);
+    color: #ff5252;
+    border: 1px solid rgba(255, 82, 82, 0.2);
+}
+.btn-danger:hover {
+    background: rgba(255, 82, 82, 0.25);
+}
+
+/* ---- Pagination ---- */
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 1.5rem;
+    gap: 0.5rem;
+}
+
+.pagination .step-links {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.pagination .current {
+    padding: 0.3rem 0.8rem;
+    background: var(--bg-card);
+    border-radius: var(--radius);
+    border: 1px solid var(--border-color);
+    font-size: 0.9rem;
+}
+
+.pagination .btn-sm {
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+    text-decoration: none;
+    padding: 0.3rem 0.8rem;
+}
+.pagination .btn-sm:hover {
+    border-color: var(--accent);
+    background: rgba(0, 212, 255, 0.05);
+}

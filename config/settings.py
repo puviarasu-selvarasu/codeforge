@@ -99,11 +99,19 @@ LANCEDB_ROOT = BASE_DIR / 'lancedb'
 # Resource thresholds (in bytes)
 MIN_FREE_RAM_BYTES = 1.5 * 1024 ** 3  # 1.5 GB
 
-# LLM settings
-LLM_MODEL_PATH = BASE_DIR / 'models' / 'qwen2.5-coder-1.5b-instruct-q4_k_m.gguf'
+# ============================================================
+# LLM Model Settings (Phase 4.6)
+# ============================================================
+LLM_15B_MODEL_PATH = BASE_DIR / 'models' / 'qwen2.5-coder-1.5b-instruct-q4_k_m.gguf'
+LLM_7B_MODEL_PATH = BASE_DIR / 'models' / 'qwen2.5-coder-7b-instruct-q5_k_m.gguf'
+
+# Default model (used in Dashboard and initial Studio load)
+DEFAULT_LLM_MODEL = '1.5B'   # options: '1.5B' or '7B'
+
+# Inference settings (shared by both models)
 LLM_N_CTX = 4096
 LLM_N_BATCH = 256
-LLM_N_THREADS = 4  # adjust based on your CPU cores
+LLM_N_THREADS = 4
 
 # Embedding model
 EMBEDDING_MODEL_NAME = 'BAAI/bge-small-en-v1.5'

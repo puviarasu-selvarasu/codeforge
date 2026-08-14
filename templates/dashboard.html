@@ -33,7 +33,6 @@
             <template x-for="msg in messages" :key="msg.id">
                 <div class="chat-message" :class="{'user': msg.role === 'user', 'assistant': msg.role === 'assistant'}">
                     <div>
-                        <div class="message-header" x-text="msg.role === 'user' ? 'You' : 'CodeForge'"></div>
                         <div class="message-bubble" x-html="renderMarkdown(msg.content)"></div>
                     </div>
                 </div>
@@ -43,7 +42,6 @@
             <div x-show="isLoading" x-data="typingDots()" x-init="init()" x-cloak>
                 <div class="chat-message assistant">
                     <div>
-                        <div class="message-header">CodeForge</div>
                         <div class="typing-indicator">
                             <span>Thinking</span>
                             <span class="typing-dot"></span>

@@ -159,28 +159,35 @@ document.addEventListener('alpine:init', () => {
         },
 
         deleteConversation(convId) {
-            if (!confirm(`Delete conversation "${this.conversations.find(c => c.id === convId)?.name || 'Untitled'}"?`)) {
-                return;
-            }
-            // 1. Remove from the conversations array
-            const index = this.conversations.findIndex(c => c.id === convId);
-            if (index === -1) return;
-            this.conversations.splice(index, 1);
-            this.saveConversations();
 
-            // 2. Delete messages from localStorage
-            const key = `codeforge_messages_${convId}`;
-            localStorage.removeItem(key);
+            window.modal.openConfirm(
+                'Delete Conversation',
+                'Delete this conversation permanently?',
+                () => {
+                    if (!confirm(`Delete conversation "${this.conversations.find(c => c.id === convId)?.name || 'Untitled'}"?`)) {
+                        return;
+                    }
+                    // 1. Remove from the conversations array
+                    const index = this.conversations.findIndex(c => c.id === convId);
+                    if (index === -1) return;
+                    this.conversations.splice(index, 1);
+                    this.saveConversations();
 
-            // 3. If the current conversation was deleted, switch to another one
-            if (this.currentConversation.id === convId) {
-                if (this.conversations.length > 0) {
-                    this.switchConversation(this.conversations[0].id);
-                } else {
-                    // No conversations left – create a new one
-                    this.newConversation();
+                    // 2. Delete messages from localStorage
+                    const key = `codeforge_messages_${convId}`;
+                    localStorage.removeItem(key);
+
+                    // 3. If the current conversation was deleted, switch to another one
+                    if (this.currentConversation.id === convId) {
+                        if (this.conversations.length > 0) {
+                            this.switchConversation(this.conversations[0].id);
+                        } else {
+                            // No conversations left – create a new one
+                            this.newConversation();
+                        }
+                    }
                 }
-            }
+            );
         }   
     }));
 });
