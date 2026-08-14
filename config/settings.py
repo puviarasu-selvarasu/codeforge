@@ -101,7 +101,7 @@ MIN_FREE_RAM_BYTES = 1.5 * 1024 ** 3  # 1.5 GB
 
 # LLM settings
 LLM_MODEL_PATH = BASE_DIR / 'models' / 'qwen2.5-coder-1.5b-instruct-q4_k_m.gguf'
-LLM_N_CTX = 1024
+LLM_N_CTX = 4096
 LLM_N_BATCH = 256
 LLM_N_THREADS = 4  # adjust based on your CPU cores
 

@@ -19,15 +19,12 @@ document.addEventListener('alpine:init', () => {
     Alpine.data('dashboardStore', () => ({
         conversations: [],
         currentConversation: { id: null, name: '', messages: [] },
-        projects: [],
-        isProjectReady: false,
         messages: [],
         currentMessage: '',
         isLoading: false,
 
         init() {
             this.loadConversations();
-            this.loadProjects();
             if (this.conversations.length === 0) {
                 this.newConversation();
             } else {
@@ -104,28 +101,6 @@ document.addEventListener('alpine:init', () => {
             }
         },
 
-        async loadProjects() {
-            try {
-                const response = await fetch('/api/projects/');
-                if (response.ok) {
-                    const data = await response.json();
-                    this.projects = data;
-                } else {
-                    this.projects = [];
-                }
-            } catch (e) {
-                this.projects = [];
-            }
-        },
-
-        openProject(id) {
-            window.location.href = `/studio/${id}/`;
-        },
-
-        generateProject() {
-            alert('Project generation will be available after you discuss your stack in chat.');
-        },
-
         async sendMessage() {
             if (!this.currentMessage.trim() || this.isLoading) return;
             const msg = this.currentMessage.trim();
@@ -181,6 +156,31 @@ document.addEventListener('alpine:init', () => {
                     container.scrollTop = container.scrollHeight;
                 }
             });
-        }
+        },
+
+        deleteConversation(convId) {
+            if (!confirm(`Delete conversation "${this.conversations.find(c => c.id === convId)?.name || 'Untitled'}"?`)) {
+                return;
+            }
+            // 1. Remove from the conversations array
+            const index = this.conversations.findIndex(c => c.id === convId);
+            if (index === -1) return;
+            this.conversations.splice(index, 1);
+            this.saveConversations();
+
+            // 2. Delete messages from localStorage
+            const key = `codeforge_messages_${convId}`;
+            localStorage.removeItem(key);
+
+            // 3. If the current conversation was deleted, switch to another one
+            if (this.currentConversation.id === convId) {
+                if (this.conversations.length > 0) {
+                    this.switchConversation(this.conversations[0].id);
+                } else {
+                    // No conversations left – create a new one
+                    this.newConversation();
+                }
+            }
+        }   
     }));
 });

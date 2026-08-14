@@ -3,7 +3,7 @@
 
 {% block content %}
 <div class="chat-layout" x-data="dashboardStore()" x-init="init()">
-    <!-- LEFT SIDEBAR -->
+    <!-- LEFT SIDEBAR: Conversations -->
     <aside class="sidebar-left">
         <h3>Conversations</h3>
         <div>
@@ -11,18 +11,23 @@
                 <div class="conversation-item" 
                      :class="{'active': currentConversation.id === conv.id}"
                      @click="switchConversation(conv.id)">
-                    <span x-text="conv.name || 'Untitled'"></span>
-                    <span style="font-size:0.65rem; display:block; color:var(--text-secondary);" 
-                          x-text="new Date(conv.updated_at).toLocaleDateString()"></span>
+                    <div class="conv-info">
+                        <span x-text="conv.name || 'Untitled'"></span>
+                        <span style="font-size:0.65rem; display:block; color:var(--text-secondary);" 
+                              x-text="new Date(conv.updated_at).toLocaleDateString()"></span>
+                    </div>
+                    <button class="conv-delete" @click.stop="deleteConversation(conv.id)" title="Delete">
+                        ×
+                    </button>
                 </div>
             </template>
-            <button class="btn btn-primary" @click="newConversation()" style="width:100%; margin-top:0.8rem; font-size:0.85rem; padding:0.5rem;">
+            <button class="btn btn-primary" @click="newConversation()" style="width:100%; margin-top:0.8rem;">
                 + New Chat
             </button>
         </div>
     </aside>
 
-    <!-- CENTER PANEL -->
+    <!-- CENTER PANEL: Chat -->
     <section class="center-panel">
         <div class="chat-messages-container" x-ref="messages">
             <template x-for="msg in messages" :key="msg.id">
@@ -34,6 +39,7 @@
                 </div>
             </template>
 
+            <!-- Typing Indicator -->
             <div x-show="isLoading" x-data="typingDots()" x-init="init()" x-cloak>
                 <div class="chat-message assistant">
                     <div>
@@ -49,6 +55,7 @@
             </div>
         </div>
 
+        <!-- Chat Input -->
         <div class="chat-input-container">
             <form @submit.prevent="sendMessage()" class="chat-input-row">
                 <input type="text" 
@@ -65,29 +72,6 @@
             </form>
         </div>
     </section>
-
-    <!-- RIGHT SIDEBAR -->
-    <aside class="sidebar-right">
-        <h3>Projects</h3>
-        <div>
-            <template x-for="proj in projects" :key="proj.id">
-                <div class="project-card" @click="openProject(proj.id)">
-                    <div class="name" x-text="proj.name"></div>
-                    <div class="framework" x-text="proj.framework || 'unknown'"></div>
-                </div>
-            </template>
-            <p x-show="projects.length === 0" class="text-muted" style="font-size:0.8rem;">
-                No projects yet.
-            </p>
-        </div>
-        <hr class="divider">
-        <button class="btn-generate" @click="generateProject()" :disabled="!isProjectReady">
-            ✨ Generate Plan
-        </button>
-        <p x-show="!isProjectReady" class="text-muted" style="font-size:0.7rem; margin-top:0.4rem;">
-            After chatting, click to generate a project.
-        </p>
-    </aside>
 </div>
 {% endblock %}
 
