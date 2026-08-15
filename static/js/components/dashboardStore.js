@@ -185,6 +185,55 @@ document.addEventListener('alpine:init', () => {
                     }
                 }
             );
-        }   
+        },
+        
+        copyCode(content) {
+            // Extract all code blocks from the markdown content
+            const codeBlockRegex = /```(?:\w+)?\n([\s\S]*?)```/g;
+            let allCode = '';
+            let match;
+            while ((match = codeBlockRegex.exec(content)) !== null) {
+                allCode += match[1] + '\n\n';
+            }
+            if (allCode.trim()) {
+                navigator.clipboard.writeText(allCode.trim());
+                if (window.toast) {
+                    window.toast.show('Code copied to clipboard!', 'success');
+                } else {
+                    window.toast.show('✅ Code copied to clipboard!', 'success');
+                }
+            } else {
+                // Fallback: copy the entire message
+                navigator.clipboard.writeText(content);
+                if (window.toast) {
+                    window.toast.show('Text copied to clipboard!', 'success');
+                }
+            }
+        },
+
+        exportChat() {
+            if (!this.messages.length) {
+                window.toast.show('No messages to export.' , 'error');
+                return;
+            }
+            // Build a markdown string
+            let md = `# CodeForge Chat Export\n\n**Exported on:** ${new Date().toLocaleString()}\n\n`;
+            this.messages.forEach(msg => {
+                const role = msg.role === 'user' ? 'You' : 'CodeForge';
+                md += `## ${role}\n\n`;
+                md += msg.content + '\n\n';
+            });
+            // Create a download link
+            const blob = new Blob([md], { type: 'text/markdown' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `codeforge-chat-${Date.now()}.md`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+        
     }));
 });

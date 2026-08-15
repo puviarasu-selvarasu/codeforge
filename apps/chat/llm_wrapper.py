@@ -27,7 +27,6 @@ class LLMWrapper:
             logger.info(f"Model {model_type} already loaded.")
             return
 
-        # RAM check for 7B
         if model_type == '7B':
             mem = psutil.virtual_memory()
             free_gb = mem.available / (1024**3)
@@ -35,13 +34,11 @@ class LLMWrapper:
                 logger.warning(f"Not enough RAM for 7B (free: {free_gb:.1f} GB). Falling back to 1.5B.")
                 model_type = '1.5B'
 
-        # Unload current model if any
         if self._model is not None:
             del self._model
             gc.collect()
             logger.info("Unloaded previous model.")
 
-        # Determine model path and max_tokens
         if model_type == '7B':
             model_path = getattr(settings, 'LLM_7B_MODEL_PATH', None)
             self._max_tokens = getattr(settings, 'LLM_7B_MAX_TOKENS', 2048)
@@ -56,7 +53,6 @@ class LLMWrapper:
             self._max_tokens = None
             return
 
-        # Load new model
         try:
             self._model = Llama(
                 model_path=str(model_path),
@@ -74,12 +70,15 @@ class LLMWrapper:
             self._current_model_type = None
             self._max_tokens = None
 
-    def generate_stream(self, user_message, context_chunks=None, system_override=None):
+    def generate_stream(self, user_message, context_chunks=None, system_override=None, max_tokens=None):
         if self._model is None:
             self.load_model(getattr(settings, 'DEFAULT_LLM_MODEL', '1.5B'))
             if self._model is None:
                 yield "⚠️ No model loaded. Please check your configuration."
                 return
+
+        # Use provided max_tokens, or fallback to self._max_tokens, then default
+        max_tokens = max_tokens or self._max_tokens or 1024
 
         system = system_override or self.system_prompt
         messages = [{"role": "system", "content": system}]
@@ -92,9 +91,6 @@ class LLMWrapper:
         for msg in messages:
             prompt += f"<|im_start|>{msg['role']}\n{msg['content']}<|im_end|>\n"
         prompt += "<|im_start|>assistant\n"
-
-        # Use the dynamic max_tokens
-        max_tokens = self._max_tokens or 1024  # fallback
 
         stream = self._model.create_completion(
             prompt,
@@ -110,13 +106,15 @@ class LLMWrapper:
                 if delta:
                     yield delta
 
-    # System prompt remains the same
     system_prompt = (
-        "You are CodeForge, a senior software engineer, architect, and technical lead. "
-        "Your expertise spans full‑stack web development, system design, and best practices. "
-        "You provide clear, concise, and professional guidance, always aiming for production‑ready code. "
-        "For general questions (like 'what is X', 'explain Y'), provide thoughtful, structured textual explanations. "
-        "Only output JSON when the user explicitly asks to create, modify, or delete a file. "
-        "When you do output JSON, use this format: "
-        "{ \"action\": \"create\" or \"modify\" or \"delete\", \"file_path\": \"path/relative/to/project\", \"content\": \"file content\" }."
+        "You are CodeForge, a senior software architect, technical lead, and code generator. "
+        "Your role is to help the user design, plan, and build production‑ready software. "
+        "You do NOT create files on disk – you provide the code, the architecture, and the reasoning. "
+        "For every request: "
+        "1. Understand the user's idea and ask clarifying questions if needed. "
+        "2. Propose a robust architecture and explain your choices. "
+        "3. Generate the complete code for each file in markdown code blocks. "
+        "4. When the user asks to add a new feature, update your mental model and generate the relevant code. "
+        "5. Always include language tags (e.g., ```python, ```php, ```java) so the code is copyable. "
+        "6. Do not attempt to write files to disk – just provide the code."
     )

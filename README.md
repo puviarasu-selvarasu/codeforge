@@ -1,37 +1,36 @@
 # 🐋 CodeForge
 
-> **A sovereign, offline-first AI developer studio that builds full-stack SaaS, web apps, and APIs from natural language – all on an 8GB laptop.**
+> **Your AI co‑founder, senior architect, and code generator – design, plan, and build production‑ready software, all offline.**
 
-CodeForge is your **personal senior software engineer, architect, and technical lead**. It runs 100% offline, respects your privacy, and transforms natural language prompts into production-ready codebases with proper structure, documentation, and security best practices.
+CodeForge is a **conversational AI developer studio** that helps you design, architect, and generate code for your software projects. It runs entirely on your laptop, respects your privacy, and gives you **copy‑ready code** – you manage the files and run the project yourself.
 
 ---
 
-## 🚀 Key Features
+## 🎯 What CodeForge Does
 
-- **🧠 Sovereign Intelligence** – 100% offline, no cloud APIs, no subscriptions. Your data never leaves your machine.
-- **💬 Smart Chat** – Streaming responses with Markdown and syntax highlighting. Smart router handles greetings, time, and date instantly.
-- **📚 Global Knowledge Base (RAG)** – Drop `.txt`, `.pdf`, `.docx`, `.md` files into `knowledge/`. Auto-indexed with TF‑IDF. Your assistant always has context.
-- **🏗️ Multi-Stack Project Builder** – Generate complete projects with a single prompt.
-  - **Backends:** Django, Flask, Laravel, Spring Boot, Node.js (Express)
-  - **Frontends:** React, Vue, Blade, Django Templates
-- **🖥️ Studio IDE** – Browse file trees, preview code with syntax highlighting, and chat contextually with your project.
-- **🔄 Model Swapper** – Switch between **Fast (1.5B)** and **Smart (7B)** models on the fly.
-- **🧹 Resource Guardian** – Monitors RAM and pauses heavy operations to prevent crashes on 8GB laptops.
-- **🔐 Privacy First** – No telemetry, no external calls. Your code stays local.
+- **Plans** the architecture – tech stack, data models, relationships, API structure.
+- **Writes** production‑ready code for any file (models, views, controllers, tests, etc.).
+- **Explains** design decisions and concepts clearly.
+- **Adds** new features to your project context.
+- **Generates** unit tests, OpenAPI documentation, refactoring suggestions, security audits, and deployment strategies.
+- **Remembers** the entire conversation – no need to repeat yourself.
+- **Continues** long responses gracefully with the `@continue` command.
+
+**You** copy the code, paste it into your own project, and run it. CodeForge is the architect – you are the builder.
 
 ---
 
 ## 🧰 Tech Stack
 
-| Layer | Technologies |
-|-------|--------------|
+| Layer | Technology |
+|-------|------------|
 | **Backend** | Django 4.2 + Python 3.11 |
 | **Frontend** | Alpine.js (local), Tailwind CSS (custom dark theme) |
-| **LLM** | Qwen-Coder-1.5B / 7B (GGUF) via `llama-cpp-python` |
-| **Vector Search** | TF‑IDF + Scikit‑learn (no PyTorch, no DLL issues) |
-| **File Monitoring** | Watchdog |
-| **Database** | SQLite (Django ORM) |
-| **Frontend Libraries** | `marked.js`, `highlight.js` (fully local) |
+| **LLM** | Qwen‑Coder 1.5B / 7B (GGUF, via `llama-cpp-python`) |
+| **RAG** | TF‑IDF + Scikit‑learn (lightweight, no PyTorch) |
+| **File Monitoring** | Watchdog (for `knowledge/` folder) |
+| **Storage** | SQLite (Django ORM – for chat history) |
+| **Frontend Libraries** | `marked.js`, `highlight.js` (local, no CDN) |
 
 ---
 
@@ -42,115 +41,121 @@ CodeForge is your **personal senior software engineer, architect, and technical 
 git clone https://github.com/yourusername/codeforge.git
 cd codeforge
 
-
+2. Create Virtual Environment
+```bash
 python -m venv venv
-source venv/bin/activate   # or venv\Scripts\activate on Windows
+source venv/bin/activate   # or `venv\Scripts\activate` on Windows
 
+3. Install Dependencies
+bash
 pip install -r requirements.txt
-
-Place your GGUF models in models/:
+4. Download the Model(s)
+Place your .gguf model file in the models/ folder:
 
 qwen2.5-coder-1.5b-instruct-q4_k_m.gguf (≈1.0 GB)
 
-qwen2.5-coder-7b-instruct-q4_k_m.gguf (≈4.7 GB)
+qwen2.5-coder-7b-instruct-q4_k_m.gguf (≈4.7 GB) – optional
 
-python manage.py makemigrations
+5. Run Migrations
+bash
 python manage.py migrate
-
+6. Start the Server
+bash
 python manage.py runserver
 
+7. Open the App
+Visit http://localhost:8000/ in your browser.
+
 🧭 How to Use
-Dashboard (Chat + Scripts)
-Ask coding questions, get snippets, and generate scripts in any language.
+The Dashboard
+A single, clean chat interface.
 
-Quick replies for "hello", "time", and "date".
+Use natural language to describe your idea or use @commands.
 
-Conversation history is stored locally.
+@commands – Your Toolbox
+Command	What It Does
+@plan <idea>	Generates a high‑level architecture plan (tech stack, models, APIs, etc.).
+@code <request>	Writes production‑ready code for a specific file or component.
+@explain <topic>	Explains a design decision, pattern, or concept.
+@add <feature>	Adds a new feature to your project context.
+@test <request>	Generates unit tests (pytest, PHPUnit, JUnit).
+@docs <request>	Generates OpenAPI/Swagger documentation.
+@refactor <request>	Suggests refactoring and provides the refactored code.
+@audit <request>	Performs a security audit and provides fixes.
+@infra <request>	Recommends a deployment strategy (Docker, CI/CD, hosting).
+@continue	Continues a cut‑off response (token limit).
+@help	Shows all available commands.
+Copy Code
+Every code block has a "📋 Copy Code" button – one click copies all code from the response.
 
-Studio (Project Workspace)
-Click Studio in the navbar.
+Chat Export
+Click "📥 Export Chat" to download the entire conversation as a Markdown file.
 
-Create a new project – choose a name and your stack (backend + frontend).
+Knowledge Base (RAG)
+Drop .txt, .md, .pdf, .docx files into the knowledge/ folder.
 
-Open the project – explore the file tree, preview code, and chat contextually.
+The system automatically indexes them (via Watchdog).
 
-Ask CodeForge to build logic – add models, views, controllers, or entire features.
-
-Switch models – toggle between Fast (1.5B) and Smart (7B) for complex reasoning.
-
-Knowledge Base
-Drop .txt, .md, .pdf, .docx files into knowledge/.
-
-The system auto-indexes them (via Watchdog).
-
-Your chat and Studio queries will reference these documents.
-
-
-🎯 Command Examples
-You                                     Say	CodeForge Does
-"Write a Python script for hello world"	Returns a code snippet.
-"Build a Django blog with user auth"	Creates a full Django project in generated_projects/.
-"Add a Post model with title and content"	(In Studio) Generates the model and updates the file.
-"Show me my project files"	(In Studio) Opens the file tree.
-"Switch to Smart (7B)"	(In Studio) Reloads the 7B model (if RAM allows).
-
-📜 License
-MIT – feel free to use, and distribute.
-
-🙏 Acknowledgments
-Qwen for the Qwen-Coder models
-
-llama-cpp-python for CPU inference
-
-Alpine.js for lightweight reactivity
-
-Highlight.js and marked.js for offline syntax highlighting and Markdown rendering
+The assistant will reference these documents when answering.
 
 
----
+🧪 Example Workflow
 
-## 📤 Push to GitHub – Checklist
+You: @plan a task management system using Django
 
-Before pushing, make sure:
+CodeForge: [Streams a detailed architecture plan with models, relationships, API structure, and folder layout.]
 
-### ✅ Files to Commit
-- `apps/`
-- `config/`
-- `static/`
-- `templates/`
-- `manage.py`
-- `requirements.txt`
-- `README.md`
-- `.gitignore`
+You: @code the Task model
 
-### ❌ Files to Exclude (in `.gitignore`)
+CodeForge: [Streams the full code for the Task model in Django.]
 
-venv/
-pycache/
-*.pyc
-db.sqlite3
-/knowledge/
-/generated_projects/
-/models/
-/lancedb/
-tfidf_index.json
-.env
+You: [Click "Copy Code" → paste into your project's models.py]
 
+You: @add user authentication to this project
 
-## 📁 Project Structure
+CodeForge: [Streams code for login, logout, registration, and URL patterns.]
+
+You: @test the Task model
+
+CodeForge: [Streams unit tests for the Task model.]
+
+You: @docs the API
+
+CodeForge: [Streams OpenAPI YAML documentation.]
+
+🗂️ Project Structure (Simplified)
+
 codeforge/
 ├── apps/
-│ ├── chat/ # LLM wrapper, router, streaming
-│ ├── core/ # Startup, resource monitor, middleware
-│ ├── knowledge/ # RAG ingestion and querying (TF‑IDF)
-│ ├── projects/ # Project models, generator, builder, scaffolder
-│ └── studio/ # Studio IDE (file tree, chat, preview)
-├── config/ # Django settings and URL routing
-├── templates/ # Base templates and includes
-├── static/ # CSS, JS, and libraries (local)
-├── knowledge/ # 📂 User uploads specs here – auto-indexed
-├── generated_projects/ # 🏗️ All generated projects
-├── models/ # GGUF model files (1.5B and 7B)
+│   ├── chat/          # LLM wrapper, router, commands, streaming
+│   ├── core/          # Startup, resource monitor
+│   └── knowledge/     # RAG ingestion and query (TF‑IDF)
+├── config/            # Django settings and URL routing
+├── templates/         # Base templates and includes
+├── static/            # CSS, JS, and local libraries
+├── knowledge/         # 📂 Upload specs here – auto‑indexed
+├── models/            # GGUF model files (1.5B / 7B)
 ├── requirements.txt
 ├── manage.py
 └── README.md
+
+🔧 Troubleshooting
+Issue                   Solution
+Model fails to load ->	Check settings.py – ensure the .gguf path is correct and the file exists.
+PyTorch/ONNX errors ->	CodeForge uses TF‑IDF, not PyTorch. If you see these, make sure you haven't installed sentence-transformers or torch accidentally.
+Chat history disappears ->	Migrations must be run. Run python manage.py migrate.
+@continue doesn't continue -> 	Ensure the previous response was stored. Send a long @plan first to test.
+Copy button not showing  ->	Check that the message contains a code block (...).
+
+📜 License
+MIT – use it freely, modify, and share.
+
+🙏 Acknowledgments
+Qwen for the Qwen‑Coder models.
+
+llama-cpp-python for CPU inference.
+
+Alpine.js for lightweight reactivity.
+
+Highlight.js and marked.js for offline syntax highlighting and Markdown rendering.
+

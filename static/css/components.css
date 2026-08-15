@@ -516,3 +516,20 @@
 .project-delete-btn:hover {
     color: #ff5252;
 }
+
+.copy-btn {
+    margin-top: 0.5rem;
+    font-size: 0.75rem;
+    padding: 0.2rem 0.8rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.copy-btn:hover {
+    background: rgba(0, 212, 255, 0.1);
+    border-color: var(--accent);
+    color: var(--text-primary);
+}

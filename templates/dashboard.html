@@ -24,19 +24,24 @@
             <button class="btn btn-primary" @click="newConversation()" style="width:100%; margin-top:0.8rem;">
                 + New Chat
             </button>
+            <button @click="exportChat()" class="btn btn-secondary btn-sm">📥 Export Chat</button>
         </div>
     </aside>
 
     <!-- CENTER PANEL: Chat -->
     <section class="center-panel">
         <div class="chat-messages-container" x-ref="messages">
-            <template x-for="msg in messages" :key="msg.id">
-                <div class="chat-message" :class="{'user': msg.role === 'user', 'assistant': msg.role === 'assistant'}">
-                    <div>
-                        <div class="message-bubble" x-html="renderMarkdown(msg.content)"></div>
-                    </div>
-                </div>
-            </template>
+        <template x-for="msg in messages" :key="msg.id">
+            <div class="chat-message" :class="{'user': msg.role === 'user', 'assistant': msg.role === 'assistant'}">
+                <div class="message-bubble" x-html="renderMarkdown(msg.content)"></div>
+                <!-- Copy Button – only for assistant messages with code -->
+                <template x-if="msg.role === 'assistant' && msg.content.includes('```')">
+                    <button @click="copyCode(msg.content)" class="btn btn-sm btn-secondary copy-btn">
+                        📋 Copy Code
+                    </button>
+                </template>
+            </div>
+        </template>
 
             <!-- Typing Indicator -->
             <div x-show="isLoading" x-data="typingDots()" x-init="init()" x-cloak>
