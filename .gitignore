@@ -23,7 +23,6 @@ db.sqlite3
 
 # CodeForge specific - user data and generated projects
 /knowledge/
-/generated_projects/
 /lancedb/
 /models/
 /tfidf_index.json

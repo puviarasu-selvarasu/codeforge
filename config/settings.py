@@ -23,8 +23,6 @@ INSTALLED_APPS = [
     # Our apps
     'apps.core',
     'apps.chat',
-    'apps.projects',
-    'apps.studio',
     'apps.knowledge',
 ]
 
@@ -93,7 +91,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Root directories (will be created automatically)
 KNOWLEDGE_ROOT = BASE_DIR / 'knowledge'
-PROJECTS_ROOT = BASE_DIR / 'generated_projects'
 LANCEDB_ROOT = BASE_DIR / 'lancedb'
 
 # Resource thresholds (in bytes)
@@ -121,6 +118,5 @@ EMBEDDING_MODEL_NAME = 'BAAI/bge-small-en-v1.5'
 
 # Create the directories if they don't exist
 os.makedirs(KNOWLEDGE_ROOT, exist_ok=True)
-os.makedirs(PROJECTS_ROOT, exist_ok=True)
 os.makedirs(LANCEDB_ROOT, exist_ok=True)
 os.makedirs(BASE_DIR / 'models', exist_ok=True)
